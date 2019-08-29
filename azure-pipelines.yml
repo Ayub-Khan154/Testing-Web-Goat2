@@ -1,0 +1,51 @@
+
+pool: 
+  demands: 
+    - msbuild
+    - visualstudio
+    - vstest
+    - java
+  name: "Hosted VS2017"
+steps: 
+  - 
+    displayName: "Use NuGet 4.4.1"
+    inputs: 
+      versionSpec: "4.4.1"
+    task: NuGetToolInstaller@0
+  - 
+    displayName: "NuGet restore"
+    inputs: 
+      restoreSolution: $(Parameters.solution)
+    task: NuGetCommand@2
+  - 
+    displayName: "Build solution"
+    inputs: 
+      clean: true
+      configuration: $(BuildConfiguration)
+      msbuildArgs: "/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation=\"$(build.artifactstagingdirectory)\\\\\""
+      platform: $(BuildPlatform)
+      solution: $(Parameters.solution)
+    task: VSBuild@1
+  - 
+    displayName: "Test Assemblies"
+    inputs: 
+      configuration: $(BuildConfiguration)
+      diagnosticsEnabled: true
+      platform: $(BuildPlatform)
+      testAssemblyVer2: |
+          **\$(BuildConfiguration)\*test*.dll
+          !**\obj\**
+    task: VSTest@2
+  - 
+    continueOnError: true
+    displayName: "Publish symbols path"
+    inputs: 
+      PublishSymbols: false
+      SearchPattern: "**\\bin\\**\\*.pdb"
+    task: PublishSymbols@2
+  - 
+    displayName: "Publish Artifact"
+    inputs: 
+      ArtifactName: $(Parameters.ArtifactName)
+      PathtoPublish: $(build.artifactstagingdirectory)
+    task: PublishBuildArtifacts@1
