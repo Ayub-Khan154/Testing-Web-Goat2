@@ -30,7 +30,6 @@ steps:
       configuration: $(BuildConfiguration)
       msbuildArgs: "/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation=\"$(build.artifactstagingdirectory)\\\\\""
       platform: $(BuildPlatform)
-      solution: $(Parameters.solution)
   - 
     task: VSTest@2
     displayName: "Test Assemblies"
