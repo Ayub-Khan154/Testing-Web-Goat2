@@ -30,7 +30,7 @@ steps:
       configuration: $(BuildConfiguration)
       msbuildArgs: "/p:DeployOnBuild=true /p:WebPublishMethod=Package /p:PackageAsSingleFile=true /p:SkipInvalidConfigurations=true /p:PackageLocation=\"$(build.artifactstagingdirectory)\\\\\""
       platform: $(BuildPlatform)
-      solution: "Webgoat.sln"
+      solution: "WebGoat.NET.sln"
   - 
     task: VSTest@2
     displayName: "Test Assemblies"
