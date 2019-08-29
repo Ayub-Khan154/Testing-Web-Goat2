@@ -3,6 +3,7 @@ using System.Text;
 using log4net;
 using System.Reflection;
 
+//Owasp testing
 namespace OWASP.WebGoat.NET.App_Code
 {
     public class WeakMessageDigest
